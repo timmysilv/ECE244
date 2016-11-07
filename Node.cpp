@@ -5,10 +5,12 @@
 Node::Node(int id_){
     id = id_;
     voltage=0;
-    set=0;
+    set=false;
+    next = NULL;
+    prev = NULL;
 }
 
-Node::Node(int id_, int voltage_, int set_, Node *prev_, Node *next_){
+Node::Node(int id_, int voltage_, bool set_, Node *prev_, Node *next_){
     id = id_;
     voltage = voltage_;
     set = set_;
@@ -21,7 +23,7 @@ Node::~Node(){
     delete next;
 }
 
-void Node::addResistor(Resistor *r){
+void Node::addResistor(Resistor& r){
     rl.addResistor(r);
 }
 

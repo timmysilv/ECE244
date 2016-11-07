@@ -16,7 +16,7 @@ private:
 public:
     NodeList();
     virtual ~NodeList();
-    Node* addNode(Node *n);
+    Node* findAddNode(int id);
     Node* search(int id);
     bool findR(string name);
 };

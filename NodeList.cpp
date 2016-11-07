@@ -14,25 +14,29 @@ NodeList::NodeList() {
 NodeList::~NodeList() {
 }
 
-Node* NodeList::addNode(Node* n){
+Node* NodeList::findAddNode(int id){
     if(head==NULL){
+        Node* n = new Node(id);
         head = n;
         tail = n;
         return head;
     }
     for(Node* cur = head; cur!=NULL; cur=cur->getNext()){
-        if(cur->getID()==n->getID()) return ;
-        if(cur->getID()>n->getID()){ //n location is found
+        if(cur->getID()==id) return cur;
+        if(cur->getID()>id){ //n location is found
+            Node* n = new Node(id);
             n->setPrev(cur->getPrev());
             (n->getPrev())->setNext(n);
             n->setNext(cur);
             cur->setPrev(n);
+            return n;
         }
         else if(cur==tail){ //n is the largest in the list
+            Node* n = new Node(id);
             cur->setNext(n);
             n->setPrev(cur);
-            n->setNext(NULL);
             tail = n;
+            return n;
         }
     }
 }

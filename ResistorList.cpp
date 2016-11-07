@@ -16,7 +16,7 @@ ResistorList::~ResistorList() {
     delete head;
 }
 
-Resistor* ResistorList::addResistor(Resistor* r){
+void ResistorList::addResistor(Resistor& r){
     if(head==NULL){
         head = r;
         tail = r;

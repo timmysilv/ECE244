@@ -17,7 +17,7 @@ private:
 public:
     ResistorList();
     virtual ~ResistorList();
-    Resistor* addResistor(Resistor *r);
+    void addResistor(Resistor& r);
     bool search(string name);
 };
 

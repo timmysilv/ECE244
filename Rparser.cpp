@@ -42,6 +42,12 @@ void Rparser::parse(string in, NodeList nodes){
         ss >> resistance;
         ss >> nodeIn[0];
         ss >> nodeIn[1];
+        Resistor temp(name,resistance,nodeIn);
+        Node* n1 = nodes.findAddNode(nodeIn[0]);
+        Node* n2 = nodes.findAddNode(nodeIn[1]);
+        n1->addResistor(Resistor(name,resistance,nodeIn));
+        //Then, (node0->rl).addResistor(temp);
+        //      (node1->rl).addResistor(temp);
         
         //Add the values to both the resistor and node arrays
         addR(name, resistance, nodeIn);

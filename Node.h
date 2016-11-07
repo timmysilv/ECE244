@@ -6,14 +6,15 @@
 class Node
 {
 private:
-   int id,voltage,set;
+   int id,voltage;
+   bool set;
    ResistorList rl;
    Node *prev,*next;
 public:
    Node(int id_);
-   Node(int id_, int voltage_, int set_, Node *prev_, Node *next_);
+   Node(int id_, int voltage_, bool set_, Node *prev_, Node *next_);
    ~Node();
-   void addResistor(Resistor *r);
+   void addResistor(Resistor& r);
    int getID();
    Node* getNext();
    Node* getPrev();
