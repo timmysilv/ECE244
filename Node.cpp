@@ -10,7 +10,7 @@ Node::Node(int id_){
     prev = NULL;
 }
 
-Node::Node(int id_, int voltage_, bool set_, Node *prev_, Node *next_){
+Node::Node(int id_, double voltage_, bool set_, Node *prev_, Node *next_){
     id = id_;
     voltage = voltage_;
     set = set_;
@@ -45,6 +45,39 @@ void Node::setNext(Node* next_){
 
 void Node::setPrev(Node* prev_){
     prev = prev_;
+}
+
+void Node::setV(double voltage_){
+    voltage = voltage_;
+}
+
+void Node::forceSet(){
+    set = true;
+}
+
+void Node::unsetV(){
+    set = false;
+    voltage = 0;
+}
+
+bool Node::isSet(){
+    return set;
+}
+
+int* Node::getOtherNodes(){
+    return rl.getOtherNodes(id);
+}
+
+double* Node::getResistors(){
+    return rl.getResistors();
+}
+
+double Node::inverseSum(){
+    return rl.inverseSum();
+}
+
+double Node::getV(){
+    return voltage;
 }
 
 Resistor* Node::getR(string name){

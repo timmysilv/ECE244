@@ -7,10 +7,9 @@
 
 using namespace std;
 
-Rparser parser;
-NodeList nodes;
-
 int main(int argc, char** argv) {
+    Rparser parser;
+    NodeList nodes;
     do{ //Loop the input request until EOF flag is sent
         string line;
         cout << "> ";

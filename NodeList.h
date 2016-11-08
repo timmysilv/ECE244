@@ -22,6 +22,9 @@ public:
     void setTail(Node* n);
     Node* findAddNode(int id);
     Node* search(int id);
+    double* getOthersV(Node* cur);
+    void solve();
+    bool unknown();
     Resistor* getR(string name);
     int* getPoints(string rName);
     void printAll();

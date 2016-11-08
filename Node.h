@@ -6,13 +6,14 @@
 class Node
 {
 private:
-   int id,voltage;
+   int id;
+   double voltage;
    bool set;
    ResistorList rl;
    Node *prev,*next;
 public:
    Node(int id_);
-   Node(int id_, int voltage_, bool set_, Node *prev_, Node *next_);
+   Node(int id_, double voltage_, bool set_, Node *prev_, Node *next_);
    ~Node();
    void addResistor(Resistor* r);
    int getID();
@@ -21,6 +22,14 @@ public:
    
    void setPrev(Node *prev_);
    void setNext(Node *next_);
+   void setV(double voltage_);
+   void forceSet();
+   void unsetV();
+   bool isSet();
+   int* getOtherNodes();
+   double* getResistors();
+   double inverseSum();
+   double getV();
    double modifyR(string name, double r);
    void deleteR(string name);
    Resistor* getR(string name);

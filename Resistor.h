@@ -21,6 +21,8 @@ public:
    string getName() const;
    double getResistance() const;
    int* getPoints();
+   int getP1();
+   int getP2();
    Resistor* getNext();
    Resistor* getPrev();
    

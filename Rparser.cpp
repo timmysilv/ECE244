@@ -129,13 +129,38 @@ void Rparser::parse(string in, NodeList& nodes){
         cout << "Deleted: resistor " << name << endl;
     }
     else if(cmd=="setV"){ //Make set = true, update its voltage
-        //Set: node 'id' to 'voltage' Volts
+        ss >> nodeIn[0];
+        Node* temp = nodes.search(nodeIn[0]);
+        if(temp==NULL){
+            cout << "Error: node " << nodeIn[0] << " not found" << endl;
+            ss.clear();
+            return;
+        }
+        double voltage;
+        ss >> voltage;
+        temp->setV(voltage);
+        temp->forceSet();
+        cout << "Set: node " << nodeIn[0] << " to "<<voltage<<" Volts" << endl;
     }
     else if(cmd=="unsetV"){ //Make set = false, voltage is unknown
-        //Unset: the solver will determine the voltage of node 'id'
+        ss >> nodeIn[0];
+        Node* temp = nodes.search(nodeIn[0]);
+        if(temp==NULL){
+            cout << "Error: node " << nodeIn[0] << " not found" << endl;
+            ss.clear();
+            return;
+        }
+        temp->unsetV();
+        cout << "Unset: the solver will determine the voltage of node "
+                << nodeIn[0] << endl;
     }
     else if(cmd=="solve"){ //Solve for all with set = false
-        //Solve:
+        if(nodes.unknown()){
+            cout << "Error: no nodes have their voltage set" << endl;
+            ss.clear();
+            return;
+        }
+        nodes.solve();
     }
     ss.clear();
 }

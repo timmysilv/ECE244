@@ -24,6 +24,9 @@ public:
     void addResistor(Resistor* r);
     Resistor* getR(string name);
     int getSize();
+    double inverseSum();
+    int* getOtherNodes(int id);
+    double* getResistors();
     void deleteR(string name);
     void printAll();
 };

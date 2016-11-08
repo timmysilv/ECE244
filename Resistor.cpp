@@ -28,6 +28,14 @@ int* Resistor::getPoints(){
     return endpointNodeIDs;
 }
 
+int Resistor::getP1(){
+    return endpointNodeIDs[0];
+}
+
+int Resistor::getP2(){
+    return endpointNodeIDs[1];
+}
+
 Resistor* Resistor::getNext(){
     return next;
 }

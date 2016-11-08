@@ -6,6 +6,7 @@
  */
 
 #include "NodeList.h"
+#define MIN_ITERATION_CHANGE 0.0001
 
 NodeList::NodeList() {
     setHead(NULL);
@@ -43,7 +44,8 @@ Node* NodeList::findAddNode(int id){
             Node* n = new Node(id);
             n->setPrev(cur->getPrev());
             //cur->getPrev() would be NULL if cur is head
-            if(cur!=head) (n->getPrev())->setNext(n);
+            if(cur==head) head = n;
+            else (n->getPrev())->setNext(n);
             n->setNext(cur);
             cur->setPrev(n);
             return n;
@@ -62,6 +64,58 @@ Node* NodeList::search(int id){
     for(Node* cur = head; cur!=NULL; cur=cur->getNext())
         if(cur->getID()==id) return cur;
     return NULL;
+}
+
+double* NodeList::getOthersV(Node* cur){ //Returns voltage array
+    int* others = cur->getOtherNodes(); //List of nodes linked to cur
+    double* othersV;
+    int count = 0;
+    while(others[count]!=-1){
+        othersV[count] = search(others[count])->getV();
+        count++;
+    }
+    othersV[count] = -1;
+    return othersV;
+}
+
+void NodeList::solve(){
+    double minChange = 1;
+    double vi,vTemp;
+    double* othersV, *othersR;
+    double iSum,rSum; // V/R sum term, 1/(1/Ri) sum term
+    int count = 0;
+    
+    for(Node* cur = head; cur!=NULL; cur=cur->getNext())
+        if(!cur->isSet()) cur->setV(0);
+    
+    while((minChange>MIN_ITERATION_CHANGE)){
+        for(Node* cur = head; cur!=NULL; cur=cur->getNext()){
+            if(!cur->isSet()){
+                othersV = getOthersV(cur);
+                othersR = cur->getResistors();
+                rSum = cur->inverseSum();
+                vi = cur->getV();
+                iSum=0;
+                for(count = 0; othersV[count]!=-1; count++)
+                    iSum+=(othersV[count]/othersR[count]);
+                vTemp = iSum*rSum;
+                cur->setV(vTemp);
+                vTemp-=vi;
+                if(vTemp<0) vTemp*=-1;
+                if(vTemp<minChange) minChange = vTemp;
+            }
+        }
+    }
+    
+    cout << "Solve:" << endl;
+    for(Node* cur = head; cur!=NULL; cur=cur->getNext())
+        cout<<"  Node "<<cur->getID()<<": "<<cur->getV()<<" V"<<endl;
+}
+
+bool NodeList::unknown(){
+    for(Node* cur = head; cur!=NULL; cur=cur->getNext())
+        if(cur->isSet()) return false;
+    return true;
 }
 
 Resistor* NodeList::getR(string name){

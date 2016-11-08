@@ -56,6 +56,39 @@ int ResistorList::getSize(){
     return total;
 }
 
+double ResistorList::inverseSum(){
+    double sum;
+    for(Resistor *cur = head; cur!=NULL; cur = cur->getNext())
+        sum += (1/(cur->getResistance()));
+    return (1/sum);
+}
+
+int* ResistorList::getOtherNodes(int id){
+    if(head==NULL) return NULL;
+    int* otherNodes;
+    int count = 0;
+    for(Resistor *cur = head; cur!=NULL; cur = cur->getNext()){
+        if(id==cur->getP1())
+            otherNodes[count] = cur->getP2();
+        else
+            otherNodes[count] = cur->getP1();
+        count++;
+    }
+    otherNodes[count] = -1; //To stop at higher level
+    return otherNodes;
+}
+
+double* ResistorList::getResistors(){
+    if(head==NULL) return NULL;
+    int count=0;
+    double* resVals;
+    for(Resistor *cur = head; cur!=NULL; cur = cur->getNext()){
+        resVals[count] = cur->getResistance();
+        count++;
+    }
+    return resVals;
+}
+
 void ResistorList::deleteR(string name){
     Resistor* temp = getR(name);
     if(temp==NULL) return; //Shouldn't happen, already checked
