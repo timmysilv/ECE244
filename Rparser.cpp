@@ -80,11 +80,13 @@ void Rparser::parse(string in, NodeList& nodes){
             ss.clear();
             return;
         }
+        cout << "Print:" << endl;
         temp->print();
     }
     else if(cmd=="printNode"){ //Print a single node, or all nodes
         ss >> name;
         if(name=="all"){
+            cout << "Print:" << endl;
             nodes.printAll();
             return;
         }
@@ -123,6 +125,17 @@ void Rparser::parse(string in, NodeList& nodes){
         
         n1->deleteR(name);
         n2->deleteR(name);
+        
+        cout << "Deleted: resistor " << name << endl;
+    }
+    else if(cmd=="setV"){ //Make set = true, update its voltage
+        //Set: node 'id' to 'voltage' Volts
+    }
+    else if(cmd=="unsetV"){ //Make set = false, voltage is unknown
+        //Unset: the solver will determine the voltage of node 'id'
+    }
+    else if(cmd=="solve"){ //Solve for all with set = false
+        //Solve:
     }
     ss.clear();
 }

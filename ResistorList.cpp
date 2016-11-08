@@ -8,28 +8,40 @@
 #include "ResistorList.h"
 
 ResistorList::ResistorList() {
-    head = NULL;
-    tail = NULL;
+    setHead(NULL);
+    setTail(NULL);
     total = 0;
 }
 
 ResistorList::~ResistorList() {
-    delete head;
+    clear();
 }
 
 void ResistorList::clear(){
     delete head;
+    setHead(NULL);
+    setTail(NULL);
+    total = 0;
+}
+
+void ResistorList::setHead(Resistor* r){
+    head = r;
+}
+
+void ResistorList::setTail(Resistor* r){
+    tail = r;
 }
 
 void ResistorList::addResistor(Resistor* r){
     if(head==NULL){
-        head = r;
-        tail = r;
+        setHead(r);
+        setTail(r);
+        total++;
         return;
     }
     r->setPrev(tail);
     tail->setNext(r);
-    tail = r;
+    setTail(r);
     total++;
     return;
 }
@@ -47,15 +59,16 @@ int ResistorList::getSize(){
 void ResistorList::deleteR(string name){
     Resistor* temp = getR(name);
     if(temp==NULL) return; //Shouldn't happen, already checked
+    total--;
     if(temp==head){
-        head = temp->getNext(); //Second is head
+        setHead(temp->getNext()); //Second is head
         head->setPrev(NULL);
         temp->setNext(NULL); //Don't want to delete the rest of the list
         delete temp;
         return;
     }
     if(temp==tail){
-        tail = temp->getPrev();
+        setTail(temp->getPrev());
         delete temp; //next is NULL, no problem
         tail->setNext(NULL);
         return;

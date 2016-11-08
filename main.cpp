@@ -17,4 +17,5 @@ int main(int argc, char** argv) {
         getline(cin,line);
         parser.parse(line,nodes);
     }while(!cin.eof());
+    nodes.clear();
 }

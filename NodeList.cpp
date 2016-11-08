@@ -8,22 +8,33 @@
 #include "NodeList.h"
 
 NodeList::NodeList() {
-    head = NULL, tail = NULL;
+    setHead(NULL);
+    setTail(NULL);
 }
 
-NodeList::~NodeList() {
-    delete head;
+NodeList::~NodeList(){
+    clear();
 }
 
 void NodeList::clear(){
     delete head;
+    setHead(NULL);
+    setTail(NULL);
+}
+
+void NodeList::setHead(Node* n){
+    head = n;
+}
+
+void NodeList::setTail(Node* n){
+    tail = n;
 }
 
 Node* NodeList::findAddNode(int id){
     if(head==NULL){
         Node* n = new Node(id);
-        head = n;
-        tail = n;
+        setHead(n);
+        setTail(n);
         return head;
     }
     for(Node* cur = head; cur!=NULL; cur=cur->getNext()){
@@ -31,7 +42,8 @@ Node* NodeList::findAddNode(int id){
         if(cur->getID()>id){ //n location is found
             Node* n = new Node(id);
             n->setPrev(cur->getPrev());
-            (n->getPrev())->setNext(n);
+            //cur->getPrev() would be NULL if cur is head
+            if(cur!=head) (n->getPrev())->setNext(n);
             n->setNext(cur);
             cur->setPrev(n);
             return n;
@@ -40,7 +52,7 @@ Node* NodeList::findAddNode(int id){
             Node* n = new Node(id);
             cur->setNext(n);
             n->setPrev(cur);
-            tail = n;
+            setTail(n);
             return n;
         }
     }
@@ -67,7 +79,6 @@ int* NodeList::getPoints(string rName){
 }
 
 void NodeList::printAll(){
-    cout << "Print: " << endl;
     for(Node* cur = head; cur!=NULL; cur=cur->getNext())
         cur->print();
 }

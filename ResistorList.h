@@ -19,6 +19,8 @@ public:
     ResistorList();
     virtual ~ResistorList();
     void clear();
+    void setHead(Resistor* r);
+    void setTail(Resistor* r);
     void addResistor(Resistor* r);
     Resistor* getR(string name);
     int getSize();

@@ -18,6 +18,8 @@ public:
     NodeList();
     virtual ~NodeList();
     void clear();
+    void setHead(Node* n);
+    void setTail(Node* n);
     Node* findAddNode(int id);
     Node* search(int id);
     Resistor* getR(string name);

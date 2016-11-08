@@ -9,6 +9,7 @@ Resistor::Resistor(string name_, double resistance_, int endpoints_[]){
     resistance = resistance_;
     endpointNodeIDs[0] = endpoints_[0];
     endpointNodeIDs[1] = endpoints_[1];
+    next = NULL, prev = NULL;
 }
 
 Resistor::~Resistor(){

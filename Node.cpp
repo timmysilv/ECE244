@@ -53,7 +53,9 @@ Resistor* Node::getR(string name){
 
 double Node::modifyR(string name, double r){
     Resistor* mod = getR(name);
+    double val = mod->getResistance();
     mod->setResistance(r);
+    return val;
 }
 
 void Node::deleteR(string name){
