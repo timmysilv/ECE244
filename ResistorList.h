@@ -14,11 +14,16 @@
 class ResistorList {
 private:
     Resistor *head, *tail;
+    int total;
 public:
     ResistorList();
     virtual ~ResistorList();
-    void addResistor(Resistor& r);
-    bool search(string name);
+    void clear();
+    void addResistor(Resistor* r);
+    Resistor* getR(string name);
+    int getSize();
+    void deleteR(string name);
+    void printAll();
 };
 
 #endif /* RESISTORLIST_H */

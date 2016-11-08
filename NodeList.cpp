@@ -12,6 +12,11 @@ NodeList::NodeList() {
 }
 
 NodeList::~NodeList() {
+    delete head;
+}
+
+void NodeList::clear(){
+    delete head;
 }
 
 Node* NodeList::findAddNode(int id){
@@ -47,8 +52,22 @@ Node* NodeList::search(int id){
     return NULL;
 }
 
-bool NodeList::findR(string name){
+Resistor* NodeList::getR(string name){
+    for(Node* cur = head; cur!=NULL; cur=cur->getNext()){
+        if(cur->getR(name)!=NULL) 
+            return (cur->getR(name));
+    }
+    return NULL;
+}
+
+int* NodeList::getPoints(string rName){
+    Resistor* temp = getR(rName);
+    if(temp==NULL) return NULL;
+    else return temp->getPoints();
+}
+
+void NodeList::printAll(){
+    cout << "Print: " << endl;
     for(Node* cur = head; cur!=NULL; cur=cur->getNext())
-        if(cur->findR(name)) return true;
-    return false;
+        cur->print();
 }

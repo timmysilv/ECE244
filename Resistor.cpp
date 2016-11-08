@@ -23,8 +23,16 @@ double Resistor::getResistance() const{
     return resistance;
 }
 
+int* Resistor::getPoints(){
+    return endpointNodeIDs;
+}
+
 Resistor* Resistor::getNext(){
     return next;
+}
+
+Resistor* Resistor::getPrev(){
+    return prev;
 }
 
 void Resistor::setResistance(double resistance_){
@@ -49,6 +57,6 @@ void Resistor::setNext(Resistor* next_){
 }
 
 void Resistor::print(){ //Proper formatting for printing a resistor
-    cout << left << setw(20) << name << " " << right << setw(8) << resistance << " Ohms " <<
-    endpointNodeIDs[0] << " -> " << endpointNodeIDs[1] << endl;
+    cout << left << setw(20) << name << " " << right << setw(8) << resistance <<
+        " Ohms " << endpointNodeIDs[0] << " -> " << endpointNodeIDs[1] << endl;
 }

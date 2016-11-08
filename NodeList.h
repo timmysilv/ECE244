@@ -9,6 +9,7 @@
 #define NODELIST_H
 
 #include "Node.h"
+#include "Resistor.h"
 
 class NodeList {
 private:
@@ -16,9 +17,12 @@ private:
 public:
     NodeList();
     virtual ~NodeList();
+    void clear();
     Node* findAddNode(int id);
     Node* search(int id);
-    bool findR(string name);
+    Resistor* getR(string name);
+    int* getPoints(string rName);
+    void printAll();
 };
 
 #endif /* NODELIST_H */

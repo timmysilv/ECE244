@@ -20,7 +20,9 @@ public:
    
    string getName() const;
    double getResistance() const;
+   int* getPoints();
    Resistor* getNext();
+   Resistor* getPrev();
    
    void setResistance (double resistance_);
    void setName(string n);

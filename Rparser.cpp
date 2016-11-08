@@ -24,7 +24,7 @@ Rparser::Rparser(){}
 
 Rparser::~Rparser(){} //Destructor
 
-void Rparser::parse(string in, NodeList nodes){
+void Rparser::parse(string in, NodeList& nodes){
     string cmd, name; //Function variable declarations
     double resistance;
     int nodeIn[2];
@@ -34,7 +34,7 @@ void Rparser::parse(string in, NodeList nodes){
     
     if(cmd=="insertR"){ //Function to insert a resistor
         ss >> name;
-        if(nodes.findR(name)){
+        if(nodes.getR(name)!=NULL){
             cout << "Error: resistor " << name << " already exists" << endl;
             ss.clear();
             return;
@@ -42,102 +42,87 @@ void Rparser::parse(string in, NodeList nodes){
         ss >> resistance;
         ss >> nodeIn[0];
         ss >> nodeIn[1];
-        Resistor temp(name,resistance,nodeIn);
+        Resistor* temp1 = new Resistor(name,resistance,nodeIn);
+        Resistor* temp2 = new Resistor(name,resistance,nodeIn);
         Node* n1 = nodes.findAddNode(nodeIn[0]);
         Node* n2 = nodes.findAddNode(nodeIn[1]);
-        n1->addResistor(Resistor(name,resistance,nodeIn));
-        //Then, (node0->rl).addResistor(temp);
-        //      (node1->rl).addResistor(temp);
-        
-        //Add the values to both the resistor and node arrays
-        addR(name, resistance, nodeIn);
-        nodes[nodeIn[0]].addResistor(rTotal); //Start node
-        nodes[nodeIn[1]].addResistor(rTotal); //End node
-        rTotal++; //Used frequently in Rparser
+        n1->addResistor(temp1);
+        n2->addResistor(temp2);
         
         cout<<"Inserted: resistor "<<name<<" "<<setprecision(2)<<fixed<<
                 resistance<<" Ohms "<<nodeIn[0]<<" -> "<<nodeIn[1]<<endl;
     }
     else if(cmd=="modifyR"){ //Used to change an existing resistor's resistance
         ss >> name;
-        for(int i=0;i<rTotal;i++) //Store the requested resistor's index
-            if(resistors[i].getName()==name)
-                index = i;
-        
-        //If the resistor was not found, index will still be default value, -1
-        if(index==-1){
+        int* points = nodes.getPoints(name);
+        if(points==NULL){
             cout << "Error: resistor " << name <<  " not found" << endl;
             ss.clear();
             return;
         }
         
-        rOld = resistors[index].getResistance(); //Store for the output message
+        Node* n1 = nodes.search(points[0]);
+        Node* n2 = nodes.search(points[1]);
+        
         ss >> resistance;
-        resistors[index].setResistance(resistance);
+        
+        rOld = n1->modifyR(name,resistance);
+        n2->modifyR(name,resistance);
+        
         cout<<"Modified: resistor "<<name<<" from "<<setprecision(2)<<fixed<<rOld
             << " Ohms to " <<setprecision(2)<<fixed<<resistance<< " Ohms" << endl;
     }
-    else if(cmd=="printR"){ //Print a single resistor, or all resistors
+    else if(cmd=="printR"){
         ss >> name;
-        if(name=="all"){ //Print all resistors
-            cout << "Print:" << endl;
-            for(int i=0; i<rTotal; i++)
-                resistors[i].print();
+        Resistor* temp = nodes.getR(name);
+        if(temp==NULL){
+            cout << "Error: resistor " << name << " not found" << endl;
+            ss.clear();
+            return;
         }
-        else{
-            for(int i=0;i<rTotal;i++) //Check that the resistor exists
-                if(resistors[i].getName()==name)
-                    index = i;
-        
-            //If the resistor was not found, index will still be default value, -1
-            if(index==-1){
-                cout << "Error: resistor " << name <<  " not found" << endl;
-                ss.clear();
-                return;
-            }
-            cout << "Print:" << endl;
-            resistors[index].print();
-        }
+        temp->print();
     }
     else if(cmd=="printNode"){ //Print a single node, or all nodes
         ss >> name;
-        if(name=="all"){ //Loop through all nodes, print all connected resistors
-            cout << "Print:" << endl;
-            for(int i=0; i<=maxN; i++){
-                //Need to pass the resistor array to each node
-                //Important for Node::print(index);
-                nodes[i].getArray(resistors);
-                nodes[i].print(i);
-            }
+        if(name=="all"){
+            nodes.printAll();
             return;
         }
         
         istringstream caster(name); //cast the str input to an int
         caster >> nodeIn[0];
         
-        if((nodeIn[0]<0)||(nodeIn[0]>maxN)){ //Nodes must be in this range
-            cout << "Error: node " << nodeIn[0] << OOR;
+        Node* temp = nodes.search(nodeIn[0]);
+        if(temp==NULL){
+            cout << "Error: node " << nodeIn[0] << " not found" << endl;
             ss.clear();
             return;
         }
         
         cout << "Print:" << endl; //Print a single node
-        nodes[nodeIn[0]].getArray(resistors);
-        nodes[nodeIn[0]].print(nodeIn[0]);
+        temp->print();
     }
     
     else if(cmd=="deleteR"){
-        cout<<"Deleted: all resistors"<<endl;
+        ss >> name;
+        if(name=="all"){
+            cout<<"Deleted: all resistors"<<endl;
+            nodes.clear();
+            return;
+        }
         
-        //Delete the old arrays
-        delete [] resistors;
-        delete [] nodes;
+        int* points = nodes.getPoints(name);
+        if(points==NULL){
+            cout << "Error: resistor " << name <<  " not found" << endl;
+            ss.clear();
+            return;
+        }
         
-        //Rebuild the arrays with stored maximum values
-        nodes = new Node[maxN+1];
-        resistors = new Resistor[maxR];
+        Node* n1 = nodes.search(points[0]);
+        Node* n2 = nodes.search(points[1]);
         
-        //Reset the resistor total (current index)
-        rTotal=0;
+        n1->deleteR(name);
+        n2->deleteR(name);
     }
+    ss.clear();
 }

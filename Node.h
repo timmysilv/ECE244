@@ -14,15 +14,17 @@ public:
    Node(int id_);
    Node(int id_, int voltage_, bool set_, Node *prev_, Node *next_);
    ~Node();
-   void addResistor(Resistor& r);
+   void addResistor(Resistor* r);
    int getID();
    Node* getNext();
    Node* getPrev();
    
    void setPrev(Node *prev_);
    void setNext(Node *next_);
-   bool findR(string name);
-   void print(int nodeIndex); 
+   double modifyR(string name, double r);
+   void deleteR(string name);
+   Resistor* getR(string name);
+   void print(); 
 };
 
 #endif	/* NODE_H */

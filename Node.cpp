@@ -19,11 +19,11 @@ Node::Node(int id_, int voltage_, bool set_, Node *prev_, Node *next_){
 }
 
 Node::~Node(){
-    delete rl;
+    rl.clear();
     delete next;
 }
 
-void Node::addResistor(Resistor& r){
+void Node::addResistor(Resistor* r){
     rl.addResistor(r);
 }
 
@@ -47,10 +47,21 @@ void Node::setPrev(Node* prev_){
     prev = prev_;
 }
 
-bool Node::findR(string name){
-    return rl.search(name);
+Resistor* Node::getR(string name){
+    return rl.getR(name);
 }
 
-void Node::print(int nodeIndex){
-    
+double Node::modifyR(string name, double r){
+    Resistor* mod = getR(name);
+    mod->setResistance(r);
+}
+
+void Node::deleteR(string name){
+    rl.deleteR(name);
+}
+
+void Node::print(){
+    cout << "Connections at node " << id << ": " 
+        << rl.getSize() << " resistor(s)" << endl;
+    rl.printAll();
 }
